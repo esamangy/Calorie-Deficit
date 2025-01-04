@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour {
     [SerializeField] private int jumpCalorieCost = 5;
-    [SerializeField] private int moveCalorieCost = 1;
-    [SerializeField] private int sprintMultiplier = 8;
     [SerializeField] private float timeCalorieCost = 1f;
     public static GameManager Instance { get; private set;}
     public event EventHandler OnCaloriesChanged;
@@ -43,8 +41,8 @@ public class GameManager : MonoBehaviour {
 
     private void HandleMovement(){
         if(!move) return;
-        int sprintMult = sprint ? sprintMultiplier : 1;
-        SpendCalories(moveCalorieCost * Time.deltaTime * sprintMult);
+        int sprintMult = sprint ? PlayerTrerrainController.Instance.GetCurrentSprintSpeedCalorieMultiplier() : 1;
+        SpendCalories(PlayerTrerrainController.Instance.GetCurrentMoveSpeedCalorieMultiplier() * Time.deltaTime * sprintMult);
     }
 
     public void RegisterMovement(bool move) {
