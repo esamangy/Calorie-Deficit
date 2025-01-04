@@ -810,6 +810,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   text: {fileID: 1151464445}
+  changeSpeed: 1
 --- !u!1 &1255390928
 GameObject:
   m_ObjectHideFlags: 0

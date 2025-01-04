@@ -1,14 +1,14 @@
 using UnityEngine;
 
-public class Coin : Selectable {
-    [SerializeField] private int score;
+public class Tomato : Selectable {
+    [SerializeField] private FoodItemSO foodItemSO;
     private Outline outline;
     private void Awake() {
         outline = GetComponent<Outline>();
         outline.enabled = false;
     }
     public override void Interact() {
-        GameManager.Instance.AddScore(score);
+        GameManager.Instance.AddCalories(foodItemSO.calorieCount);
         Destroy(gameObject);
     }
 

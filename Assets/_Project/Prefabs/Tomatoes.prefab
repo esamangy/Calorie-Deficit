@@ -78,7 +78,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1420f06dd18687a408adeaac6f30dcd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  score: 20
+  foodItemSO: {fileID: 11400000, guid: ce90179ac8ba03747a5e485430f3c02a, type: 2}
 --- !u!114 &6009177533682912207
 MonoBehaviour:
   m_ObjectHideFlags: 0

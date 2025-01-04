@@ -4,16 +4,19 @@ using UnityEngine;
 
 public class ScoreUI : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI text;
+    [SerializeField] private float changeSpeed = 1f;
+    private float lastCaloriesUnRounded;
     private void Start() {
-        GameManager.Instance.OnScoreChanged += GameManager_OnScoreChanged;
-        UpdateVisual();
+        lastCaloriesUnRounded = GameManager.Instance.GetPlayerCalories();
+        text.text = $"Calories: {GameManager.Instance.GetPlayerCalories()}";
     }
 
-    private void GameManager_OnScoreChanged(object sender, EventArgs e) {
+    private void Update() {
         UpdateVisual();
     }
 
     private void UpdateVisual() {
-        text.text = $"Score: {GameManager.Instance.GetScore()}";
+        lastCaloriesUnRounded = Mathf.Lerp(lastCaloriesUnRounded, GameManager.Instance.GetPlayerCalories(), Time.deltaTime * changeSpeed);
+        text.text = $"Calories: {Mathf.Round(lastCaloriesUnRounded)}";
     }
 }

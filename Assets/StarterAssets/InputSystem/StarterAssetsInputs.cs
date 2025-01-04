@@ -49,6 +49,7 @@ namespace StarterAssets
 		public void MoveInput(Vector2 newMoveDirection)
 		{
 			move = newMoveDirection;
+			GameManager.Instance.RegisterMovement(move != Vector2.zero);
 		} 
 
 		public void LookInput(Vector2 newLookDirection)
@@ -59,11 +60,13 @@ namespace StarterAssets
 		public void JumpInput(bool newJumpState)
 		{
 			jump = newJumpState;
+			if(newJumpState) GameManager.Instance.RegisterJump();
 		}
 
 		public void SprintInput(bool newSprintState)
 		{
 			sprint = newSprintState;
+			GameManager.Instance.RegisterSprint(sprint);
 		}
 		
 		private void OnApplicationFocus(bool hasFocus)
