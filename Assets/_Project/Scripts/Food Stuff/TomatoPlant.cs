@@ -1,14 +1,15 @@
 using UnityEngine;
 
-public class Tomato : Selectable {
-    [SerializeField] private FoodItemSO foodItemSO;
+public class TomatoPlant : Selectable {
+    [SerializeField] private PlantSO plantSO;
     private Outline outline;
     private void Awake() {
         outline = GetComponent<Outline>();
         outline.enabled = false;
     }
-    public override void Interact() {
-        GameManager.Instance.AddCalories(foodItemSO.calorieCount);
+    public override void Interact(PlayerInteraction.Handedness handedness) {
+        Selectable tomato = Instantiate(plantSO.foodPrefab).GetComponent<Selectable>();
+        PlayerInventory.Instance.SetSelecting(tomato, handedness);
         Destroy(gameObject);
     }
 

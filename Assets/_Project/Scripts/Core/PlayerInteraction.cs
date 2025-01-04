@@ -3,6 +3,10 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerInteraction : MonoBehaviour {
+    public enum Handedness {
+        Right,
+        Left
+    }
     [SerializeField] private Transform playerCameraRoot;
     [SerializeField] private float maxReach = 2f;
     private Selectable lastSelected;
@@ -51,8 +55,22 @@ public class PlayerInteraction : MonoBehaviour {
         }
     }
     public void OnInteract(InputValue value) {
-        if(lastSelected != null){
-            lastSelected.Interact();
+        if(PlayerInventory.Instance.HasLeftSelecting()) {
+            PlayerInventory.Instance.GetLeftHandSelecting().Interact(Handedness.Left);
+        } else {
+            if(lastSelected != null){
+                lastSelected.Interact(Handedness.Left);
+            }
+        }
+    }
+
+    public void OnInteractAlt(InputValue value) {
+        if(PlayerInventory.Instance.HasRightSelecting()) {
+            PlayerInventory.Instance.GetRightHandSelecting().Interact(Handedness.Right);
+        } else {
+            if(lastSelected != null){
+                lastSelected.Interact(Handedness.Right);
+            }
         }
     }
 }
