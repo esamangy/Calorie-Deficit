@@ -2,8 +2,8 @@ using StarterAssets;
 using UnityEngine;
 
 [RequireComponent(typeof(FirstPersonController))]
-public class PlayerTrerrainController : MonoBehaviour {
-    public static PlayerTrerrainController Instance {get; private set;}
+public class PlayerTerrainController : MonoBehaviour {
+    public static PlayerTerrainController Instance {get; private set;}
     [SerializeField] private TerrainInfoSO terrainInfoSO;
     private FirstPersonController playerController;
     private CharacterController characterController;
@@ -29,6 +29,8 @@ public class PlayerTrerrainController : MonoBehaviour {
             UpdatePlayerController(type);
             lastType = type;
         }
+
+        
     }
 
     private void UpdatePlayerController(TerrainInfoSO.TerrainType newType){
@@ -56,7 +58,7 @@ public class PlayerTrerrainController : MonoBehaviour {
         if(array.Length == 0) return TerrainInfoSO.TerrainType.Normal;
         if(array.Length == 1) return 0;
         int index = 0;
-        int most = 0;
+        int most = array[0];
 
         for(int i = 1; i < array.Length; i ++){
             if(array[i] > most){
@@ -74,5 +76,9 @@ public class PlayerTrerrainController : MonoBehaviour {
 
     public int GetCurrentSprintSpeedCalorieMultiplier() {
         return terrainInfoSO.GetTerrainInfo(lastType).sprintSpeedCalorieMultiplier;
+    }
+
+    public bool GetTypeSink() {
+        return terrainInfoSO.GetTerrainInfo(lastType).sinks;
     }
 }

@@ -41,8 +41,8 @@ public class GameManager : MonoBehaviour {
 
     private void HandleMovement(){
         if(!move) return;
-        int sprintMult = sprint ? PlayerTrerrainController.Instance.GetCurrentSprintSpeedCalorieMultiplier() : 1;
-        SpendCalories(PlayerTrerrainController.Instance.GetCurrentMoveSpeedCalorieMultiplier() * Time.deltaTime * sprintMult);
+        int sprintMult = sprint ? PlayerTerrainController.Instance.GetCurrentSprintSpeedCalorieMultiplier() : 1;
+        SpendCalories(PlayerTerrainController.Instance.GetCurrentMoveSpeedCalorieMultiplier() * Time.deltaTime * sprintMult);
     }
 
     public void RegisterMovement(bool move) {
