@@ -16,7 +16,9 @@ GameObject:
   - component: {fileID: 6454954992746953668}
   - component: {fileID: 3623761288335808416}
   - component: {fileID: 5083457806325605190}
-  m_Layer: 8
+  - component: {fileID: 2199804551272778876}
+  - component: {fileID: 5457141979241232538}
+  m_Layer: 2
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -256,6 +258,35 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   leftHandPosition: {fileID: 8167423449308363364}
   rightHandPosition: {fileID: 4352808193113649486}
+--- !u!114 &2199804551272778876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 145634758625868515}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4f639966a38f7c4e80c457cf485794f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  terrainInfoSO: {fileID: 11400000, guid: db8b0aaeded2d1d4a8a64f7ce344c6cb, type: 2}
+--- !u!114 &5457141979241232538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 145634758625868515}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbcd7be969dde7a48a19c6b7b552becb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sinkTime: 2
+  escapeTime: 1
+  playerCameraRoot: {fileID: 8367496312737860108}
+  sunkOffset: {x: 0, y: -1, z: 0}
 --- !u!1 &3910208245144713415
 GameObject:
   m_ObjectHideFlags: 0
@@ -265,7 +296,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4352808193113649486}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Right Hand Posiiton
   m_TagString: CinemachineTarget
   m_Icon: {fileID: 0}
@@ -296,7 +327,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8167423449308363364}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Left Hand Posiiton
   m_TagString: CinemachineTarget
   m_Icon: {fileID: 0}
@@ -330,7 +361,7 @@ GameObject:
   - component: {fileID: 3400791670119031205}
   - component: {fileID: 5466853636605133535}
   - component: {fileID: 5132904834003664075}
-  m_Layer: 8
+  m_Layer: 2
   m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -437,7 +468,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8367496312737860108}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: PlayerCameraRoot
   m_TagString: CinemachineTarget
   m_Icon: {fileID: 0}
