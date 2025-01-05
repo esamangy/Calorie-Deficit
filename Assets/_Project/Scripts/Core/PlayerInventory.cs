@@ -5,9 +5,11 @@ public class PlayerInventory : MonoBehaviour {
     [SerializeField] private float smoothingMultiplier = 3f;
     [SerializeField] private Transform leftHandPosition;
     [SerializeField] private Transform rightHandPosition;
+    [SerializeField] private Transform cameraRoot;
     private Selectable leftHandSelecting;
     private Selectable rightHandSelecting;
-
+    private Vector3 leftSmoothedPosiiton;
+    private Vector3 rightSmoothedPosiiton;
     private void Awake() {
         if(Instance != null) {
             Destroy(this);
@@ -16,12 +18,21 @@ public class PlayerInventory : MonoBehaviour {
         Instance = this;
     }
 
+    private void Start() {
+        leftSmoothedPosiiton = leftHandPosition.position;
+        rightSmoothedPosiiton = rightHandPosition.position;
+    }
+
     private void Update() {
+        leftSmoothedPosiiton = Vector3.Lerp(leftSmoothedPosiiton, leftHandPosition.position, Time.deltaTime * smoothingMultiplier);
+        rightSmoothedPosiiton = Vector3.Lerp(rightSmoothedPosiiton, rightHandPosition.position, Time.deltaTime * smoothingMultiplier);
         if(leftHandSelecting != null){
-            leftHandSelecting.transform.position = Vector3.Lerp(leftHandSelecting.transform.position, leftHandPosition.position, Time.deltaTime * smoothingMultiplier);
+            leftHandSelecting.transform.position = leftSmoothedPosiiton;
+            leftHandSelecting.transform.rotation = cameraRoot.transform.rotation;
         }
         if(rightHandSelecting != null){
-            rightHandSelecting.transform.position = Vector3.Lerp(rightHandSelecting.transform.position, rightHandPosition.position, Time.deltaTime * smoothingMultiplier);
+            rightHandSelecting.transform.position = rightSmoothedPosiiton;
+            rightHandSelecting.transform.rotation = cameraRoot.transform.rotation;
         }
     }
 
@@ -35,8 +46,10 @@ public class PlayerInventory : MonoBehaviour {
 
     public void SetSelecting(Selectable item, PlayerInteraction.Handedness handedness) {
         if(handedness == PlayerInteraction.Handedness.Right) {
+            rightSmoothedPosiiton = item.transform.position;
             SetRightHandSelecting(item);
         } else {
+            leftSmoothedPosiiton = item.transform.position;
             SetLeftHandSelecting(item);
         }
     }
@@ -57,6 +70,6 @@ public class PlayerInventory : MonoBehaviour {
     }
 
     public Vector3 GetHandLocation(PlayerInteraction.Handedness handedness){
-        return handedness == PlayerInteraction.Handedness.Left ? leftHandPosition.position : rightHandPosition.position;
+        return handedness == PlayerInteraction.Handedness.Left ? leftSmoothedPosiiton : rightSmoothedPosiiton;
     }
 }

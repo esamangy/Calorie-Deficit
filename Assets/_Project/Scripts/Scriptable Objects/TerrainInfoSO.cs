@@ -18,9 +18,11 @@ public class TerrainInfoSO : ScriptableObject {
         public bool sinks;
     }
     [SerializeField] private TerrainInfo[] types;
-
+    private bool generated = false;
     private void Awake() {
+        if(generated) return;
         GenerateDefaults();
+        generated = true;
     }
 
     private void GenerateDefaults() {

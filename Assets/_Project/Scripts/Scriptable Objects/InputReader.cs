@@ -13,6 +13,7 @@ public class InputReader : ScriptableObject, IPlayerActions {
     public event UnityAction InteractAlt = delegate { };
     PlayerInput inputActions;
     public Vector3 Direction => inputActions.Player.Move.ReadValue<Vector2>();
+    [HideInInspector]
     public bool IsSprinting;
     private void OnEnable() {
         if (inputActions == null) {

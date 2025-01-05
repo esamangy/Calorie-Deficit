@@ -17,7 +17,6 @@ GameObject:
   - component: {fileID: 5083457806325605190}
   - component: {fileID: 2199804551272778876}
   - component: {fileID: 5457141979241232538}
-  - component: {fileID: 4523420451223835338}
   m_Layer: 2
   m_Name: Player
   m_TagString: Player
@@ -197,20 +196,6 @@ MonoBehaviour:
   playerCameraRoot: {fileID: 8367496312737860108}
   sunkOffset: {x: 0, y: -1, z: 0}
   input: {fileID: 11400000, guid: 5880a0669d171ef4986ebafdf67411d9, type: 2}
---- !u!114 &4523420451223835338
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 145634758625868515}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4f639966a38f7c4e80c457cf485794f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  terrainInfoSO: {fileID: 11400000, guid: db8b0aaeded2d1d4a8a64f7ce344c6cb, type: 2}
-  playerController: {fileID: 699892952097803380}
 --- !u!1 &3314598549347992843
 GameObject:
   m_ObjectHideFlags: 0

@@ -9,8 +9,12 @@ public class PlayerInteraction : MonoBehaviour {
     }
     [SerializeField] private InputReader input;
     [SerializeField] private Transform playerCameraRoot;
+    [SerializeField] private Animator leftHandAnimator;
+    [SerializeField] private Animator rightHandAnimator;
     [SerializeField] private float maxReach = 2f;
     private Selectable lastSelected;
+    private Selectable usingSelectable;
+    private bool isUsing => usingSelectable != null;
     private void OnEnable() {
         input.Interact += OnInteract;
         input.InteractAlt += OnInteractAlt;
@@ -25,6 +29,10 @@ public class PlayerInteraction : MonoBehaviour {
     }
 
     private void HandleHover(){
+        if(isUsing){
+            lastSelected = null;
+            return;
+        }
         Ray ray = new Ray(playerCameraRoot.position, playerCameraRoot.forward);
 
         RaycastHit hit;
@@ -65,20 +73,46 @@ public class PlayerInteraction : MonoBehaviour {
     }
     public void OnInteract() {
         if(PlayerInventory.Instance.HasLeftSelecting()) {
-            PlayerInventory.Instance.GetLeftHandSelecting().Interact(Handedness.Left);
+            Selectable selectable = PlayerInventory.Instance.GetLeftHandSelecting();
+            if(selectable is BasicFood){
+                leftHandAnimator.SetTrigger("Eat");
+            } else {
+                if(isUsing){
+                    leftHandAnimator.SetTrigger("Grab");
+                    usingSelectable = null;
+                } else {
+                    leftHandAnimator.SetTrigger("Use");
+                    usingSelectable = selectable;
+                }
+            }
+            selectable.Interact(Handedness.Left);
         } else {
             if(lastSelected != null){
                 lastSelected.Interact(Handedness.Left);
+                leftHandAnimator.SetTrigger("Grab");
             }
         }
     }
 
     public void OnInteractAlt() {
         if(PlayerInventory.Instance.HasRightSelecting()) {
-            PlayerInventory.Instance.GetRightHandSelecting().Interact(Handedness.Right);
+            Selectable selectable = PlayerInventory.Instance.GetRightHandSelecting();
+            if(selectable is BasicFood){
+                rightHandAnimator.SetTrigger("Eat");
+            } else {
+                if(isUsing){
+                    rightHandAnimator.SetTrigger("Grab");
+                    usingSelectable = null;
+                } else {
+                    rightHandAnimator.SetTrigger("Use");
+                    usingSelectable = selectable;
+                }
+            }
+            selectable.Interact(Handedness.Left);
         } else {
             if(lastSelected != null){
                 lastSelected.Interact(Handedness.Right);
+                rightHandAnimator.SetTrigger("Grab");
             }
         }
     }

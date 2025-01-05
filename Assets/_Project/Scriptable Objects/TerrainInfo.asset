@@ -14,14 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   types:
   - type: 0
-    moveSpeed: 300
+    moveSpeed: 200
     moveSpeedCalorieMultiplier: 1
-    sprintSpeed: 400
+    sprintSpeed: 300
     sprintSpeedCalorieMultiplier: 3
     sinks: 0
   - type: 1
-    moveSpeed: 150
+    moveSpeed: 100
     moveSpeedCalorieMultiplier: 1
-    sprintSpeed: 200
-    sprintSpeedCalorieMultiplier: 5
+    sprintSpeed: 150
+    sprintSpeedCalorieMultiplier: 6
     sinks: 1
