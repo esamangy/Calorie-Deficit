@@ -1,11 +1,10 @@
-using StarterAssets;
 using UnityEngine;
 
-[RequireComponent(typeof(FirstPersonController))]
+// [RequireComponent(typeof(FirstPersonController))]
 public class PlayerTerrainController : MonoBehaviour {
     public static PlayerTerrainController Instance {get; private set;}
     [SerializeField] private TerrainInfoSO terrainInfoSO;
-    private FirstPersonController playerController;
+    // private FirstPersonController playerController;
     private CharacterController characterController;
     private TerrainInfoSO.TerrainType lastType;
     private void Awake() {
@@ -14,7 +13,7 @@ public class PlayerTerrainController : MonoBehaviour {
             return;
         }
         Instance = this;
-        playerController = GetComponent<FirstPersonController>();
+        // playerController = GetComponent<FirstPersonController>();
         characterController = GetComponent<CharacterController>();
     }
 
@@ -35,8 +34,8 @@ public class PlayerTerrainController : MonoBehaviour {
 
     private void UpdatePlayerController(TerrainInfoSO.TerrainType newType){
         TerrainInfoSO.TerrainInfo info = terrainInfoSO.GetTerrainInfo(newType);
-        playerController.MoveSpeed = info.moveSpeed;
-        playerController.SprintSpeed = info.sprintSpeed;
+        // playerController.MoveSpeed = info.moveSpeed;
+        // playerController.SprintSpeed = info.sprintSpeed;
     }
 
     private TerrainInfoSO.TerrainType PlayerStandingIn() {
