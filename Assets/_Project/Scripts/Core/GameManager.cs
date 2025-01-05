@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour {
+    [SerializeField] private int startingCalories;
     [SerializeField] private int jumpCalorieCost = 5;
     [SerializeField] private float timeCalorieCost = 1f;
     public static GameManager Instance { get; private set;}
@@ -15,7 +16,9 @@ public class GameManager : MonoBehaviour {
         }
         Instance = this;
     }
-
+    private void Start() {
+        AddCalories(startingCalories);
+    }
     private void Update() {
         SpendCalories(timeCalorieCost * Time.deltaTime);
         HandleMovement();
