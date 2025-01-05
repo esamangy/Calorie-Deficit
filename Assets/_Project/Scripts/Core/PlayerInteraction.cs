@@ -7,10 +7,19 @@ public class PlayerInteraction : MonoBehaviour {
         Right,
         Left
     }
+    [SerializeField] private InputReader input;
     [SerializeField] private Transform playerCameraRoot;
     [SerializeField] private float maxReach = 2f;
     private Selectable lastSelected;
+    private void OnEnable() {
+        input.Interact += OnInteract;
+        input.InteractAlt += OnInteractAlt;
+    }
 
+    private void OnDisable() {
+        input.Interact -= OnInteract;
+        input.InteractAlt -= OnInteractAlt;
+    }
     private void Update() {
         HandleHover();
     }
@@ -54,7 +63,7 @@ public class PlayerInteraction : MonoBehaviour {
             }
         }
     }
-    public void OnInteract(InputValue value) {
+    public void OnInteract() {
         if(PlayerInventory.Instance.HasLeftSelecting()) {
             PlayerInventory.Instance.GetLeftHandSelecting().Interact(Handedness.Left);
         } else {
@@ -64,7 +73,7 @@ public class PlayerInteraction : MonoBehaviour {
         }
     }
 
-    public void OnInteractAlt(InputValue value) {
+    public void OnInteractAlt() {
         if(PlayerInventory.Instance.HasRightSelecting()) {
             PlayerInventory.Instance.GetRightHandSelecting().Interact(Handedness.Right);
         } else {
