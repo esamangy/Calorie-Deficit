@@ -1,89 +1,161 @@
 using System;
-using Cinemachine;
+using System.Collections.Generic;
+using Unity.Cinemachine;
 using UnityEngine;
+using static Timer;
 
 public class PlayerController : MonoBehaviour {
     [Header("References")]
-    [SerializeField] private CharacterController controller;
+    [SerializeField] private Rigidbody rb;
+    [SerializeField] private GroundChecker groundChecker;
     [SerializeField] private Animator animator;
-    [SerializeField] private CinemachineVirtualCamera virtualVCam;
+    [SerializeField] private Transform virtualVCam;
     [SerializeField] private InputReader input;
     [SerializeField] private Transform cameraRoot;
+    [SerializeField] private CapsuleCollider thisCollider;
 
-    [Header("Settings")]
-    [SerializeField] private float moveSpeed = 6f;
-    [SerializeField] private float rotationSpeed = 15f;
+    [Header("Movement Settings")]
+    [SerializeField] private float moveSpeed = 300f;
+    [SerializeField] private float sprintSpeed = 600f;
+    [SerializeField] private float cameraSpeed = 15f;
     [SerializeField] private float smoothTime = .2f;
 
+    [Header("Jump Settings")]
+    [SerializeField] float jumpForce = 10f;
+    [SerializeField] float jumpDuration = .5f;
+    [SerializeField] float jumpCooldown = .2f;
+    [SerializeField] float gravityMultiplier = 1f;
+
     private const float ZeroF = 0f;
-    private const float TopClamp = 90.0f;
-    private const float BottomClamp = -90.0f;
     private Transform mainCam;
 
     private float currentSpeed;
     private float velocity;
+    float jumpVelocity;
 
-    private float _cinemachineTargetPitch;
-    private float _rotationVelocity;
+    private Vector3 movement;
+    List<Timer> timers;
+    CountdownTimer jumpTimer;
+    CountdownTimer jumpCooldownTimer;
+    private StateMachine stateMachine;
     
     private void Awake() {
         mainCam = Camera.main.transform;
 
-        virtualVCam.Follow = cameraRoot;
-        virtualVCam.LookAt = cameraRoot;
-        virtualVCam.OnTargetObjectWarped(transform, transform.position - virtualVCam.transform.position - Vector3.forward);
+        virtualVCam.GetComponent<CinemachineCamera>().Follow = cameraRoot;
+
+        rb.freezeRotation = true;
+
+        //Setup timers
+        jumpTimer = new CountdownTimer(jumpDuration);
+        jumpCooldownTimer = new CountdownTimer(jumpCooldown);
+        timers = new List<Timer>(2) { jumpTimer, jumpCooldownTimer};
+
+        jumpTimer.OnTimerStart += () => jumpVelocity = jumpForce;
+        jumpTimer.OnTimerStop += () => jumpCooldownTimer.Start();
+
+        // State Machine
+        stateMachine = new StateMachine();
+
+        //Declare States
+        var locomationState = new LocomotionState(this);
+        var jumpState = new JumpState(this);
+
+        //define transitions;
+        At(locomationState, jumpState, new FuncPredicate(() => jumpTimer.IsRunning));
+        At(jumpState, locomationState, new FuncPredicate(() => groundChecker.IsGrounded && !jumpTimer.IsRunning));
+
+        stateMachine.SetState(locomationState);
+    }
+
+    void At(IState from, IState to, IPredicate condition) {
+        stateMachine.AddTransition(from, to, condition);
+    }
+    void Any(IState to, IPredicate condition) {
+        stateMachine.AddAnyTransition(to, condition);
     }
 
     private void OnEnable() {
-        input.Look += OnLook;
+        input.Jump += OnJump;
 
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-    private void OnLook(Vector2 arg0, bool arg1) {
-        //Don't multiply mouse input by Time.deltaTime
-		float deltaTimeMultiplier = false ? 1.0f : Time.deltaTime;
+    private void OnDisable() {
+        input.Jump -= OnJump;
 
-        _cinemachineTargetPitch += arg0.y * rotationSpeed * deltaTimeMultiplier;
-        _rotationVelocity = arg0.x * rotationSpeed * deltaTimeMultiplier;
+        Cursor.lockState = CursorLockMode.Confined;
+    }
 
-        // clamp our pitch rotation
-        _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
-
-        // Update Cinemachine camera target pitch
-        cameraRoot.transform.localRotation = Quaternion.Euler(-_cinemachineTargetPitch, 0.0f, 0.0f);
-
-        // rotate the player left and right
-        transform.Rotate(Vector3.up * _rotationVelocity);
+    private void OnJump(bool performed) {
+        if(performed && !jumpTimer.IsRunning && !jumpCooldownTimer.IsRunning && groundChecker.IsGrounded) {
+            jumpTimer.Start();
+        } else if (!performed && jumpTimer.IsRunning){
+            jumpTimer.Stop();
+        }
     }
 
     private void Update() {
-        HandleMovement();
+        movement = new Vector3(input.Direction.x, 0f, input.Direction.y);
+        cameraRoot.rotation = virtualVCam.rotation;
+
+        stateMachine.Update();
+        HandleTimers();
         // HandleAnimator();
     }
 
-    private void HandleMovement() {
-        Vector3 movementDirection = new Vector3(input.Direction.x, 0f, input.Direction.y).normalized;
-        Vector3 adjustedDirection = Quaternion.AngleAxis(mainCam.eulerAngles.y, Vector3.up) * movementDirection;
+    private void HandleTimers() {
+        foreach (Timer timer in timers) {
+            timer.Tick(Time.deltaTime);
+        }
+    }
+
+    private void FixedUpdate() {
+        stateMachine.FixedUpdate();
+    }
+
+    public void HandleJump() {
+        //if not jumping and grounded, keep jump velocity at 0
+        if(!jumpTimer.IsRunning && groundChecker.IsGrounded) {
+            jumpVelocity = ZeroF;
+            jumpTimer.Stop();
+            return;
+        }
+
+        if(!jumpTimer.IsRunning) {
+            //Gravity takes over
+            jumpVelocity += Physics.gravity.y * gravityMultiplier * Time.fixedDeltaTime;
+        }
+
+        //apply vlocity
+        rb.linearVelocity = new Vector3(rb.linearVelocity.x, jumpVelocity, rb.linearVelocity.z);
+    }
+
+    public void HandleMovement() {
+        Vector3 adjustedDirection = Quaternion.AngleAxis(mainCam.eulerAngles.y, Vector3.up) * movement;
 
         if(adjustedDirection.magnitude > ZeroF) {
             //HandleRotation(adjustedDirection);
-            HandleCharacterController(adjustedDirection);
+            HandleHorizontalMovement(adjustedDirection);
 
             SmoothSpeed(adjustedDirection.magnitude);
         } else {
             SmoothSpeed(ZeroF);
+
+            //Reset horizonl velocity for a snappy stop
+            rb.linearVelocity = new Vector3(ZeroF, rb.linearVelocity.y, ZeroF);
         }
     }
-    private void HandleCharacterController(Vector3 adjustedDirection) {
+    private void HandleHorizontalMovement(Vector3 adjustedDirection) {
         //move the player
-        Vector3 adjustedMovement = adjustedDirection * (moveSpeed * Time.deltaTime);
-        controller.Move(adjustedMovement);
+        float speed = input.IsSprinting ? sprintSpeed : moveSpeed;
+        Vector3 velocity = adjustedDirection * speed * Time.fixedDeltaTime;
+        rb.linearVelocity = new Vector3(velocity.x, rb.linearVelocity.y, velocity.z);
     }
     private void HandleRotation(Vector3 adjustedDirection) {
         //adjust rotation to match movement direction
         Quaternion targetRotation = Quaternion.LookRotation(adjustedDirection);
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, cameraSpeed * Time.deltaTime);
     }
 
     private void SmoothSpeed(float value) {
@@ -94,5 +166,17 @@ public class PlayerController : MonoBehaviour {
         if (lfAngle < -360f) lfAngle += 360f;
         if (lfAngle > 360f) lfAngle -= 360f;
         return Mathf.Clamp(lfAngle, lfMin, lfMax);
+    }
+
+    public void SetMoveSpeed(float value) {
+        moveSpeed = value;
+    }
+
+    public void SetSprintSpeed(float value) {
+        sprintSpeed = value;
+    }
+
+    public float GetRadius() {
+        return thisCollider.radius;
     }
 }

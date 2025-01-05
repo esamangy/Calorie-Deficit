@@ -8,10 +8,10 @@ public class PlayerSinking : MonoBehaviour {
     [SerializeField] private float sinkTime = 2f;
     [SerializeField] private float escapeTime = 1f;
     [SerializeField] private Transform playerCameraRoot;
-    [SerializeField] private Vector3 sunkOffset = new Vector3(0, -.5f, 0);
+    [SerializeField] private Vector3 sunkOffset = new Vector3(0, -1f, 0);
+    [SerializeField] private InputReader input;
     private Vector3 initialCameraPosition;
     private PlayerTerrainController terrainController;
-    // private StarterAssetsInputs input;
     private bool wasSinkingLastFrame;
     private Coroutine sinkCoroutine;
     private float sinkProgress = 0;
@@ -19,7 +19,6 @@ public class PlayerSinking : MonoBehaviour {
     public event EventHandler OnPlayerSunk;
     private void Awake() {
         terrainController = GetComponent<PlayerTerrainController>();
-        // input = GetComponent<StarterAssetsInputs>();
     }
 
     private void Start() {
@@ -31,19 +30,19 @@ public class PlayerSinking : MonoBehaviour {
     }
 
     private void Update() {
-        // bool shouldSinkThisFrame = terrainController.GetTypeSink() && input.move == Vector2.zero;
-        // if(shouldSinkThisFrame && !wasSinkingLastFrame) {
-        //     if(sinkCoroutine != null){
-        //         StopCoroutine(sinkCoroutine);
-        //     }
-        //     sinkCoroutine = StartCoroutine(Sink());
-        // } else if(wasSinkingLastFrame && !shouldSinkThisFrame){
-        //     if(sinkCoroutine != null){
-        //         StopCoroutine(sinkCoroutine);
-        //     }
-        //     sinkCoroutine = StartCoroutine(Escape());
-        // }
-        // wasSinkingLastFrame = shouldSinkThisFrame;
+        bool shouldSinkThisFrame = terrainController.GetTypeSink() && input.Direction == Vector3.zero;
+        if(shouldSinkThisFrame && !wasSinkingLastFrame) {
+            if(sinkCoroutine != null){
+                StopCoroutine(sinkCoroutine);
+            }
+            sinkCoroutine = StartCoroutine(Sink());
+        } else if(wasSinkingLastFrame && !shouldSinkThisFrame){
+            if(sinkCoroutine != null){
+                StopCoroutine(sinkCoroutine);
+            }
+            sinkCoroutine = StartCoroutine(Escape());
+        }
+        wasSinkingLastFrame = shouldSinkThisFrame;
     }
 
     private IEnumerator Sink() {

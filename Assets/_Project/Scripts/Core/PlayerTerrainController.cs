@@ -1,11 +1,10 @@
 using UnityEngine;
 
-// [RequireComponent(typeof(FirstPersonController))]
+[RequireComponent(typeof(PlayerController))]
 public class PlayerTerrainController : MonoBehaviour {
     public static PlayerTerrainController Instance {get; private set;}
     [SerializeField] private TerrainInfoSO terrainInfoSO;
-    // private FirstPersonController playerController;
-    private CharacterController characterController;
+    [SerializeField] private PlayerController playerController;
     private TerrainInfoSO.TerrainType lastType;
     private void Awake() {
         if(Instance != null) {
@@ -13,8 +12,6 @@ public class PlayerTerrainController : MonoBehaviour {
             return;
         }
         Instance = this;
-        // playerController = GetComponent<FirstPersonController>();
-        characterController = GetComponent<CharacterController>();
     }
 
     private void Start() {
@@ -28,14 +25,12 @@ public class PlayerTerrainController : MonoBehaviour {
             UpdatePlayerController(type);
             lastType = type;
         }
-
-        
     }
 
     private void UpdatePlayerController(TerrainInfoSO.TerrainType newType){
         TerrainInfoSO.TerrainInfo info = terrainInfoSO.GetTerrainInfo(newType);
-        // playerController.MoveSpeed = info.moveSpeed;
-        // playerController.SprintSpeed = info.sprintSpeed;
+        playerController.SetMoveSpeed(info.moveSpeed);
+        playerController.SetSprintSpeed(info.sprintSpeed);
     }
 
     private TerrainInfoSO.TerrainType PlayerStandingIn() {
@@ -43,7 +38,7 @@ public class PlayerTerrainController : MonoBehaviour {
 
         Vector3 playerPositionAdjusted = transform.position + (Vector3.up * .25f);
 
-        RaycastHit[] hits = Physics.SphereCastAll(playerPositionAdjusted, characterController.radius, -Vector3.up, .3f);
+        RaycastHit[] hits = Physics.SphereCastAll(playerPositionAdjusted, playerController.GetRadius(), -Vector3.up, .3f);
 
         foreach (RaycastHit hit in hits) {
             if(hit.transform.TryGetComponent(out Terrain terrain)) {

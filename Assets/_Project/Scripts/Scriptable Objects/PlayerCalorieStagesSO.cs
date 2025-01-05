@@ -19,9 +19,11 @@ public class PlayerCalorieStagesSO : ScriptableObject {
         public Sprite sprite;
     }
     [SerializeField] private HungerInfo[] stages;
-
+    private bool awoken = false;
     private void Awake() {
+        if(awoken) return;
         GenerateDefaults();
+        awoken = true;
     }
 
     private void GenerateDefaults() {

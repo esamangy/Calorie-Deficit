@@ -4,19 +4,19 @@ public abstract class PlayerBaseState : IState {
     protected PlayerBaseState(PlayerController player) {
         this.player = player;
     }
-    public void FixedUpdate() {
+    public virtual void FixedUpdate() {
         // noop
     }
 
-    public void OnEnter() {
+    public virtual void OnEnter() {
         // noop
     }
 
-    public void OnExit() {
+    public virtual void OnExit() {
         // noop
     }
 
-    public void Update() {
+    public virtual void Update() {
         // noop
     }
 }
