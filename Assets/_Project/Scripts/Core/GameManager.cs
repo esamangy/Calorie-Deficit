@@ -2,14 +2,13 @@ using System;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour {
+    [SerializeField] private InputReader input;
     [SerializeField] private int startingCalories;
     [SerializeField] private int jumpCalorieCost = 5;
     [SerializeField] private float timeCalorieCost = 1f;
     public static GameManager Instance { get; private set;}
     public event EventHandler OnCaloriesChanged;
     private float playerCalories;
-    private bool sprint = false;
-    private bool move = false;
     private void Awake() {
         if(Instance != null) {
             Destroy(this);
@@ -43,16 +42,8 @@ public class GameManager : MonoBehaviour {
     }
 
     private void HandleMovement(){
-        if(!move) return;
-        int sprintMult = sprint ? PlayerTerrainController.Instance.GetCurrentSprintSpeedCalorieMultiplier() : 1;
+        if(input.Direction == Vector3.zero) return;
+        int sprintMult = input.IsSprinting ? PlayerTerrainController.Instance.GetCurrentSprintSpeedCalorieMultiplier() : 1;
         SpendCalories(PlayerTerrainController.Instance.GetCurrentMoveSpeedCalorieMultiplier() * Time.deltaTime * sprintMult);
-    }
-
-    public void RegisterMovement(bool move) {
-        this.move = move;
-    }
-
-    public void RegisterSprint(bool sprint) {
-        this.sprint = sprint;
     }
 }

@@ -8,7 +8,7 @@ public class TomatoPlant : Selectable {
         outline.enabled = false;
     }
     public override void Interact(PlayerInteraction.Handedness handedness) {
-        Selectable tomato = Instantiate(plantSO.foodPrefab).GetComponent<Selectable>();
+        Selectable tomato = Instantiate(plantSO.foodPrefab, PlayerInventory.Instance.GetHandLocation(handedness), Quaternion.identity).GetComponent<Selectable>();
         PlayerInventory.Instance.SetSelecting(tomato, handedness);
         Destroy(gameObject);
     }

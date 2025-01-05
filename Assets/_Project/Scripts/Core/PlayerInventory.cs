@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class PlayerInventory : MonoBehaviour {
     public static PlayerInventory Instance { get; private set;}
+    [SerializeField] private float smoothingMultiplier = 3f;
     [SerializeField] private Transform leftHandPosition;
     [SerializeField] private Transform rightHandPosition;
     private Selectable leftHandSelecting;
@@ -17,10 +18,10 @@ public class PlayerInventory : MonoBehaviour {
 
     private void Update() {
         if(leftHandSelecting != null){
-            leftHandSelecting.transform.position = leftHandPosition.position;
+            leftHandSelecting.transform.position = Vector3.Lerp(leftHandSelecting.transform.position, leftHandPosition.position, Time.deltaTime * smoothingMultiplier);
         }
         if(rightHandSelecting != null){
-            rightHandSelecting.transform.position = rightHandPosition.position;
+            rightHandSelecting.transform.position = Vector3.Lerp(rightHandSelecting.transform.position, rightHandPosition.position, Time.deltaTime * smoothingMultiplier);
         }
     }
 
@@ -53,5 +54,9 @@ public class PlayerInventory : MonoBehaviour {
 
     public bool HasRightSelecting() {
         return rightHandSelecting != null;
+    }
+
+    public Vector3 GetHandLocation(PlayerInteraction.Handedness handedness){
+        return handedness == PlayerInteraction.Handedness.Left ? leftHandPosition.position : rightHandPosition.position;
     }
 }
