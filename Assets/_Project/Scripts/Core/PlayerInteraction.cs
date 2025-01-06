@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
@@ -20,9 +21,11 @@ public class PlayerInteraction : MonoBehaviour {
     private Selectable usingSelectable;
     private Handedness usingHand = Handedness.None;
     public bool isUsing => usingSelectable != null;
-    private float interactStartTime;
-    private float interactAltStartTime;
-    private const float HOLD_TIME = .4f;
+    public float interactStartTime {get; private set;}
+    public float interactAltStartTime {get; private set;}
+    public const float HOLD_TIME = .4f;
+    public event UnityAction<Handedness> OnHoldStarted;
+    public event UnityAction<Handedness> OnHoldStopped; 
     private void Awake() {
         if(Instance != null) {
             Destroy(this);
@@ -90,9 +93,11 @@ public class PlayerInteraction : MonoBehaviour {
         float time;
         if(started){
             interactStartTime = Time.time;
+            OnHoldStarted.Invoke(Handedness.Left);
             return;
         } else if(cancelled){
             time = Time.time - interactStartTime;
+            OnHoldStopped.Invoke(Handedness.Left);
         } else {return;}
 
         if(time > HOLD_TIME ){
@@ -116,8 +121,8 @@ public class PlayerInteraction : MonoBehaviour {
                         leftHandAnimator.SetTrigger("Use");
                         usingSelectable = selectable;
                         usingHand = Handedness.Left;
-                        PlayerInventory.Instance.MoveLeftTo();
-                        StartCoroutine(DelayInteract(Handedness.Left, selectable, .5f));
+                        PlayerInventory.Instance.MoveLeftTo(.5f);
+                        selectable.Interact(Handedness.Right);
                     }
                 }
             }
@@ -139,9 +144,11 @@ public class PlayerInteraction : MonoBehaviour {
         float time;
         if(started){
             interactAltStartTime = Time.time;
+            OnHoldStarted.Invoke(Handedness.Right);
             return;
         } else if(cancelled){
             time = Time.time - interactAltStartTime;
+            OnHoldStopped.Invoke(Handedness.Right);
         } else {return;}
 
         if(time > HOLD_TIME){
@@ -165,8 +172,8 @@ public class PlayerInteraction : MonoBehaviour {
                         rightHandAnimator.SetTrigger("Use");
                         usingSelectable = selectable;
                         usingHand = Handedness.Right;
-                        PlayerInventory.Instance.MoveRightTo();
-                        StartCoroutine(DelayInteract(Handedness.Right, selectable, .5f));
+                        PlayerInventory.Instance.MoveRightTo(.5f);
+                        selectable.Interact(Handedness.Right);
                     }
                 }
             }

@@ -587,10 +587,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6596542026299777171, guid: db89c69d91b247c4ca0b65bfb192ad7f, type: 3}
-      propertyPath: playerCalorieStagesSO
-      value: 
-      objectReference: {fileID: 11400000, guid: 98aa477d624dd534db512a059bc69d44, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 
 public class PlayerInventory : MonoBehaviour {
+    private const float DIST_FROM_CAMERA = .4f;
     public static PlayerInventory Instance { get; private set;}
     [SerializeField] private float smoothingMultiplier = 3f;
     [SerializeField] private Transform leftHandPosition;
@@ -11,7 +12,6 @@ public class PlayerInventory : MonoBehaviour {
     private Selectable rightHandSelecting;
     private Vector3 leftSmoothedPosiiton;
     private Vector3 rightSmoothedPosiiton;
-
     private Coroutine moveCoroutineOther;
     private Coroutine moveCoroutine;
     private void Awake() {
@@ -129,9 +129,9 @@ public class PlayerInventory : MonoBehaviour {
         StartCoroutine(MoveRightToFaceAndBack(.1f, .9f, 1f));
     }
 
-    public void MoveLeftTo() {
+    public void MoveLeftTo(float value) {
         UpdateRightUntilStopped(true);
-        StartCoroutine(MoveLeftToFace(.1f));
+        StartCoroutine(MoveLeftToFace(value));
     }
 
     public void MoveLeftBack() {
@@ -140,9 +140,9 @@ public class PlayerInventory : MonoBehaviour {
         StartCoroutine(MoveLeftBack(.1f));
     }
 
-    public void MoveRightTo() {
+    public void MoveRightTo(float value) {
         UpdateLeftUntilStopped(true);
-        StartCoroutine(MoveRightToFace(.1f));
+        StartCoroutine(MoveRightToFace(value));
     }
 
     public void MoveRightBack() {
@@ -155,7 +155,7 @@ public class PlayerInventory : MonoBehaviour {
         yield return StartCoroutine(MoveLeftToFace(moveToTime));
         float timer = 0;
         while(timer < stayTime - moveToTime){
-            leftSmoothedPosiiton = cameraRoot.position + cameraRoot.forward * .3f;
+            leftSmoothedPosiiton = cameraRoot.position + cameraRoot.forward * DIST_FROM_CAMERA;
             rightSmoothedPosiiton = Vector3.Lerp(rightSmoothedPosiiton, rightHandPosition.position, Time.deltaTime * smoothingMultiplier);
             timer += Time.deltaTime;
             yield return null;
@@ -170,7 +170,7 @@ public class PlayerInventory : MonoBehaviour {
         float timer = 0;
         Vector3 startPos = leftSmoothedPosiiton;
         while(timer < moveTime) {
-            leftSmoothedPosiiton = Vector3.Lerp(startPos, cameraRoot.position + cameraRoot.forward * .3f, timer / moveTime);
+            leftSmoothedPosiiton = Vector3.Lerp(startPos, cameraRoot.position + cameraRoot.forward * DIST_FROM_CAMERA, timer / moveTime);
             timer += Time.deltaTime;
             yield return null;
         }
@@ -180,7 +180,7 @@ public class PlayerInventory : MonoBehaviour {
     private IEnumerator MoveLeftBack(float moveTime) {
         float timer = 0;
         while(timer < moveTime){
-            leftSmoothedPosiiton = Vector3.Lerp(cameraRoot.position + cameraRoot.forward * .3f, leftHandPosition.position, timer / moveTime);
+            leftSmoothedPosiiton = Vector3.Lerp(cameraRoot.position + cameraRoot.forward * DIST_FROM_CAMERA, leftHandPosition.position, timer / moveTime);
             timer += Time.deltaTime;
             yield return null;
         }
@@ -194,7 +194,7 @@ public class PlayerInventory : MonoBehaviour {
         yield return StartCoroutine(MoveRightToFace(moveToTime));
         float timer = 0;
         while(timer < stayTime - moveToTime){
-            rightSmoothedPosiiton = cameraRoot.position + cameraRoot.forward * .3f;
+            rightSmoothedPosiiton = cameraRoot.position + cameraRoot.forward * DIST_FROM_CAMERA;
             leftSmoothedPosiiton = Vector3.Lerp(leftSmoothedPosiiton, leftHandPosition.position, Time.deltaTime * smoothingMultiplier);
             timer += Time.deltaTime;
             yield return null;
@@ -206,7 +206,7 @@ public class PlayerInventory : MonoBehaviour {
         float timer = 0;
         Vector3 startPos = rightSmoothedPosiiton;
         while(timer < moveTime) {
-            rightSmoothedPosiiton = Vector3.Lerp(startPos, cameraRoot.position + cameraRoot.forward * .3f, timer / moveTime);
+            rightSmoothedPosiiton = Vector3.Lerp(startPos, cameraRoot.position + cameraRoot.forward * DIST_FROM_CAMERA, timer / moveTime);
             timer += Time.deltaTime;
             yield return null;
         }
@@ -216,7 +216,7 @@ public class PlayerInventory : MonoBehaviour {
     private IEnumerator MoveRightBack(float moveTime) {
         float timer = 0;
         while(timer < moveTime){
-            rightSmoothedPosiiton = Vector3.Lerp(cameraRoot.position + cameraRoot.forward * .3f, rightHandPosition.position, timer / moveTime);
+            rightSmoothedPosiiton = Vector3.Lerp(cameraRoot.position + cameraRoot.forward * DIST_FROM_CAMERA, rightHandPosition.position, timer / moveTime);
             timer += Time.deltaTime;
             yield return null;
         }
@@ -228,14 +228,14 @@ public class PlayerInventory : MonoBehaviour {
 
     private IEnumerator UpdateLeftMain() {
         while(true) {
-            leftSmoothedPosiiton = cameraRoot.position + cameraRoot.forward * .3f;
+            leftSmoothedPosiiton = cameraRoot.position + cameraRoot.forward * DIST_FROM_CAMERA;
             yield return null;
         }
     }
 
     private IEnumerator UpdateRightMain() {
         while(true) {
-            rightSmoothedPosiiton = cameraRoot.position + cameraRoot.forward * .3f;
+            rightSmoothedPosiiton = cameraRoot.position + cameraRoot.forward * DIST_FROM_CAMERA;
             yield return null;
         }
     }
