@@ -18,23 +18,16 @@ public class TerrainInfoSO : ScriptableObject {
         public bool sinks;
     }
     [SerializeField] private TerrainInfo[] types;
-    private bool generated = false;
-    private void Awake() {
-        if(generated) return;
-        GenerateDefaults();
-        generated = true;
-    }
-
-    private void GenerateDefaults() {
+    public void GenerateDefaults() {
         types = new TerrainInfo[Enum.GetNames(typeof(TerrainType)).Length];
         int cntr = 0;
         foreach(string value in Enum.GetNames(typeof(TerrainType))) {
             types[cntr] = new TerrainInfo{
                 type = (TerrainType)Enum.Parse(typeof(TerrainType), value),
-                moveSpeed = 4,
+                moveSpeed = 200,
                 moveSpeedCalorieMultiplier = 1,
-                sprintSpeed = 6,
-                sprintSpeedCalorieMultiplier = 4,
+                sprintSpeed = 300,
+                sprintSpeedCalorieMultiplier = 3,
                 sinks = false,
             };
             cntr ++;

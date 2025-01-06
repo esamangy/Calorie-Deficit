@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 1487551376776097907}
   - component: {fileID: 6821660434745676408}
   - component: {fileID: 5553974309780079992}
+  - component: {fileID: 257261509373708424}
   m_Layer: 0
   m_Name: Telescope
   m_TagString: Untagged
@@ -78,6 +79,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd904dfdea1c2cb4e98581ae9b0a81e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  thisCollider: {fileID: 2031559899634083139}
+  rb: {fileID: 257261509373708424}
 --- !u!114 &5553974309780079992
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92,10 +95,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outlineMode: 0
   outlineColor: {r: 0, g: 0.19978714, b: 1, a: 1}
-  outlineWidth: 5
+  outlineWidth: 10
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+--- !u!54 &257261509373708424
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3414308022462445247}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1001 &4234656601351227991
 PrefabInstance:
   m_ObjectHideFlags: 0

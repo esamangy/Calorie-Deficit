@@ -19,14 +19,7 @@ public class PlayerCalorieStagesSO : ScriptableObject {
         public Sprite sprite;
     }
     [SerializeField] private HungerInfo[] stages;
-    private bool awoken = false;
-    private void Awake() {
-        if(awoken) return;
-        GenerateDefaults();
-        awoken = true;
-    }
-
-    private void GenerateDefaults() {
+    public void GenerateDefaults() {
         stages = new HungerInfo[Enum.GetNames(typeof(HungerStage)).Length];
         int cntr = 0;
         foreach(string value in Enum.GetNames(typeof(HungerStage))) {

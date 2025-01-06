@@ -21,4 +21,8 @@ public class TomatoPlant : Selectable {
     public override void OnHoverExit() {
         outline.enabled = false;
     }
+
+    public override void Drop() {
+        Debug.LogError("Dropped tomato plant. This should not be possible");
+    }
 }

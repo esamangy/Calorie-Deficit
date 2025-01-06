@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.PlayerLoop;
 using static PlayerInput;
 
 [CreateAssetMenu(fileName = "InputReader", menuName = "Scriptable Objects/Input Reader")]
@@ -9,12 +10,13 @@ public class InputReader : ScriptableObject, IPlayerActions {
     public event UnityAction<Vector2, bool> Look = delegate { };
     public event UnityAction<bool> Jump = delegate { };
     public event UnityAction<bool> Sprint = delegate { };
-    public event UnityAction Interact = delegate { };
-    public event UnityAction InteractAlt = delegate { };
+    public event UnityAction<bool, bool> Interact = delegate { };
+    public event UnityAction<bool, bool> InteractAlt = delegate { };
     PlayerInput inputActions;
     public Vector3 Direction => inputActions.Player.Move.ReadValue<Vector2>();
     [HideInInspector]
     public bool IsSprinting;
+
     private void OnEnable() {
         if (inputActions == null) {
             inputActions = new PlayerInput();
@@ -27,9 +29,7 @@ public class InputReader : ScriptableObject, IPlayerActions {
         inputActions.Disable();
     }
     public void OnInteract(InputAction.CallbackContext context) {
-        if(context.performed){
-            Interact.Invoke();
-        }
+        Interact.Invoke(context.started, context.canceled);
     }
 
     public void OnLook(InputAction.CallbackContext context) {
@@ -60,9 +60,7 @@ public class InputReader : ScriptableObject, IPlayerActions {
     }
 
     public void OnInteractAlt(InputAction.CallbackContext context) {
-        if(context.performed){
-            InteractAlt.Invoke();
-        }
+        InteractAlt.Invoke(context.started, context.canceled);
     }
 
     public void OnSprint(InputAction.CallbackContext context) {

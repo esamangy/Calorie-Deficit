@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class PlayerInventory : MonoBehaviour {
@@ -10,6 +11,9 @@ public class PlayerInventory : MonoBehaviour {
     private Selectable rightHandSelecting;
     private Vector3 leftSmoothedPosiiton;
     private Vector3 rightSmoothedPosiiton;
+
+    private Coroutine moveCoroutineOther;
+    private Coroutine moveCoroutine;
     private void Awake() {
         if(Instance != null) {
             Destroy(this);
@@ -24,8 +28,10 @@ public class PlayerInventory : MonoBehaviour {
     }
 
     private void Update() {
-        leftSmoothedPosiiton = Vector3.Lerp(leftSmoothedPosiiton, leftHandPosition.position, Time.deltaTime * smoothingMultiplier);
-        rightSmoothedPosiiton = Vector3.Lerp(rightSmoothedPosiiton, rightHandPosition.position, Time.deltaTime * smoothingMultiplier);
+        if(!PlayerInteraction.Instance.isUsing){
+            leftSmoothedPosiiton = Vector3.Lerp(leftSmoothedPosiiton, leftHandPosition.position, Time.deltaTime * smoothingMultiplier);
+            rightSmoothedPosiiton = Vector3.Lerp(rightSmoothedPosiiton, rightHandPosition.position, Time.deltaTime * smoothingMultiplier);
+        }
         if(leftHandSelecting != null){
             leftHandSelecting.transform.position = leftSmoothedPosiiton;
             leftHandSelecting.transform.rotation = cameraRoot.transform.rotation;
@@ -33,6 +39,44 @@ public class PlayerInventory : MonoBehaviour {
         if(rightHandSelecting != null){
             rightHandSelecting.transform.position = rightSmoothedPosiiton;
             rightHandSelecting.transform.rotation = cameraRoot.transform.rotation;
+        }
+    }
+
+    public void UpdateRightUntilStopped(bool onOff){
+        if(onOff){
+            moveCoroutineOther = StartCoroutine(UpdateRight());
+        } else {
+            StopCoroutine(moveCoroutineOther);
+        }
+    }
+
+    private IEnumerator UpdateRight() {
+        while(true){
+            rightSmoothedPosiiton = Vector3.Lerp(rightSmoothedPosiiton, rightHandPosition.position, Time.deltaTime * smoothingMultiplier);
+            yield return null;
+        }
+    }
+
+    public void UpdateLeftUntilStopped(bool onOff){
+        if(onOff){
+            moveCoroutineOther = StartCoroutine(UpdateLeft());
+        } else {
+            StopCoroutine(moveCoroutineOther);
+        }
+    }
+
+    private IEnumerator UpdateLeft() {
+        while(true){
+            leftSmoothedPosiiton = Vector3.Lerp(leftSmoothedPosiiton, leftHandPosition.position, Time.deltaTime * smoothingMultiplier);
+            yield return null;
+        }
+    }
+
+    public Selectable GetSelecteable(PlayerInteraction.Handedness handedness){
+        if(handedness == PlayerInteraction.Handedness.Right) {
+            return GetRightHandSelecting();
+        } else {
+            return GetLeftHandSelecting();
         }
     }
 
@@ -46,19 +90,23 @@ public class PlayerInventory : MonoBehaviour {
 
     public void SetSelecting(Selectable item, PlayerInteraction.Handedness handedness) {
         if(handedness == PlayerInteraction.Handedness.Right) {
-            rightSmoothedPosiiton = item.transform.position;
             SetRightHandSelecting(item);
         } else {
-            leftSmoothedPosiiton = item.transform.position;
             SetLeftHandSelecting(item);
         }
     }
     public void SetLeftHandSelecting(Selectable item) {
         leftHandSelecting = item;
+        if(leftHandSelecting != null){
+            leftSmoothedPosiiton = item.transform.position;
+        }
     }
 
     public void SetRightHandSelecting(Selectable item) {
         rightHandSelecting = item;
+        if(rightHandSelecting != null){
+            rightSmoothedPosiiton = item.transform.position;
+        }
     }
 
     public bool HasLeftSelecting() {
@@ -71,5 +119,124 @@ public class PlayerInventory : MonoBehaviour {
 
     public Vector3 GetHandLocation(PlayerInteraction.Handedness handedness){
         return handedness == PlayerInteraction.Handedness.Left ? leftSmoothedPosiiton : rightSmoothedPosiiton;
+    }
+
+    public void MoveLeftToAndBack(){
+        StartCoroutine(MoveLeftToFaceAndBack(.1f, .9f, 1f));
+    }
+
+    public void MoveRightToAndBack() {
+        StartCoroutine(MoveRightToFaceAndBack(.1f, .9f, 1f));
+    }
+
+    public void MoveLeftTo() {
+        UpdateRightUntilStopped(true);
+        StartCoroutine(MoveLeftToFace(.1f));
+    }
+
+    public void MoveLeftBack() {
+        StopCoroutine(moveCoroutine);
+        UpdateRightUntilStopped(false);
+        StartCoroutine(MoveLeftBack(.1f));
+    }
+
+    public void MoveRightTo() {
+        UpdateLeftUntilStopped(true);
+        StartCoroutine(MoveRightToFace(.1f));
+    }
+
+    public void MoveRightBack() {
+        StopCoroutine(moveCoroutine);
+        UpdateLeftUntilStopped(false);
+        StartCoroutine(MoveRightBack(.1f));
+    }
+
+    private IEnumerator MoveLeftToFaceAndBack(float moveToTime, float stayTime, float moveBackTime){
+        yield return StartCoroutine(MoveLeftToFace(moveToTime));
+        float timer = 0;
+        while(timer < stayTime - moveToTime){
+            leftSmoothedPosiiton = cameraRoot.position + cameraRoot.forward * .3f;
+            rightSmoothedPosiiton = Vector3.Lerp(rightSmoothedPosiiton, rightHandPosition.position, Time.deltaTime * smoothingMultiplier);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        yield return StartCoroutine(MoveLeftBack(moveBackTime - stayTime));
+        moveCoroutineOther = null;
+        if(moveCoroutine != null){
+            StopCoroutine(moveCoroutine);
+        }
+    }
+    private IEnumerator MoveLeftToFace(float moveTime) {
+        float timer = 0;
+        Vector3 startPos = leftSmoothedPosiiton;
+        while(timer < moveTime) {
+            leftSmoothedPosiiton = Vector3.Lerp(startPos, cameraRoot.position + cameraRoot.forward * .3f, timer / moveTime);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        moveCoroutine = StartCoroutine(UpdateLeftMain());
+    }
+
+    private IEnumerator MoveLeftBack(float moveTime) {
+        float timer = 0;
+        while(timer < moveTime){
+            leftSmoothedPosiiton = Vector3.Lerp(cameraRoot.position + cameraRoot.forward * .3f, leftHandPosition.position, timer / moveTime);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        leftSmoothedPosiiton = leftHandPosition.position;
+        if(moveCoroutine != null){
+            StopCoroutine(moveCoroutine);
+        }
+    }
+
+    private IEnumerator MoveRightToFaceAndBack(float moveToTime, float stayTime, float moveBackTime){
+        yield return StartCoroutine(MoveRightToFace(moveToTime));
+        float timer = 0;
+        while(timer < stayTime - moveToTime){
+            rightSmoothedPosiiton = cameraRoot.position + cameraRoot.forward * .3f;
+            leftSmoothedPosiiton = Vector3.Lerp(leftSmoothedPosiiton, leftHandPosition.position, Time.deltaTime * smoothingMultiplier);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        yield return StartCoroutine(MoveRightBack(moveBackTime - stayTime));
+        moveCoroutineOther = null;
+    }
+    private IEnumerator MoveRightToFace(float moveTime) {
+        float timer = 0;
+        Vector3 startPos = rightSmoothedPosiiton;
+        while(timer < moveTime) {
+            rightSmoothedPosiiton = Vector3.Lerp(startPos, cameraRoot.position + cameraRoot.forward * .3f, timer / moveTime);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        moveCoroutine = StartCoroutine(UpdateRightMain());
+    }
+
+    private IEnumerator MoveRightBack(float moveTime) {
+        float timer = 0;
+        while(timer < moveTime){
+            rightSmoothedPosiiton = Vector3.Lerp(cameraRoot.position + cameraRoot.forward * .3f, rightHandPosition.position, timer / moveTime);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        rightSmoothedPosiiton = rightHandPosition.position;
+        if(moveCoroutine != null){
+            StopCoroutine(moveCoroutine);
+        }
+    }
+
+    private IEnumerator UpdateLeftMain() {
+        while(true) {
+            leftSmoothedPosiiton = cameraRoot.position + cameraRoot.forward * .3f;
+            yield return null;
+        }
+    }
+
+    private IEnumerator UpdateRightMain() {
+        while(true) {
+            rightSmoothedPosiiton = cameraRoot.position + cameraRoot.forward * .3f;
+            yield return null;
+        }
     }
 }

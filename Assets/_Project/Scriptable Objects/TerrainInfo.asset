@@ -21,7 +21,7 @@ MonoBehaviour:
     sinks: 0
   - type: 1
     moveSpeed: 100
-    moveSpeedCalorieMultiplier: 1
+    moveSpeedCalorieMultiplier: 2
     sprintSpeed: 150
-    sprintSpeedCalorieMultiplier: 6
+    sprintSpeedCalorieMultiplier: 5
     sinks: 1
