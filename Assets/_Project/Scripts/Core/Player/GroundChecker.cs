@@ -10,4 +10,8 @@ public class GroundChecker : MonoBehaviour {
     void Update() {
         IsGrounded = Physics.SphereCast(transform.position + (Vector3.up * heightOffset), groundDistance, Vector3.down, out _, groundDistance + heightOffset, groundLayers);
     }
+
+    void OnDrawGizmos() {
+        Debug.DrawRay(transform.position + (Vector3.up * heightOffset), Vector3.down * (groundDistance + heightOffset), Color.red);
+    }
 }
