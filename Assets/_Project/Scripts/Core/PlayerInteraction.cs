@@ -95,7 +95,7 @@ public class PlayerInteraction : MonoBehaviour {
             time = Time.time - interactStartTime;
         } else {return;}
 
-        if(time > HOLD_TIME){
+        if(time > HOLD_TIME ){
             //Held
             if(isUsing && usingHand != Handedness.Left) return;
             if(PlayerInventory.Instance.HasLeftSelecting()) {
@@ -122,8 +122,10 @@ public class PlayerInteraction : MonoBehaviour {
                 }
             }
         } else {
+            if(isUsing) return;
             if(PlayerInventory.Instance.HasLeftSelecting()) {
                 Drop(Handedness.Left);
+                leftHandAnimator.SetTrigger("Release");
             } else {
                 if(lastSelected != null){
                     lastSelected.Interact(Handedness.Left);
@@ -169,8 +171,10 @@ public class PlayerInteraction : MonoBehaviour {
                 }
             }
         } else {
+            if(isUsing) return;
             if(PlayerInventory.Instance.HasRightSelecting()) {
                 Drop(Handedness.Right);
+                rightHandAnimator.SetTrigger("Release");
             } else {
                 if(lastSelected != null){
                     lastSelected.Interact(Handedness.Right);
