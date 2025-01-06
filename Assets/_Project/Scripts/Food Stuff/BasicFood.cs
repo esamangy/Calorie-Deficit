@@ -5,12 +5,12 @@ public class BasicFood : Selectable {
     [SerializeField] private Collider thisCollider;
     [SerializeField] private Rigidbody rb;
     private Outline outline;
-    private bool isHeld = true;
+    private bool isHeld = false;
     private void Awake() {
         outline = GetComponent<Outline>();
         outline.enabled = false;
-        rb.isKinematic = true;
-        thisCollider.enabled = false;
+        rb.isKinematic = false;
+        thisCollider.enabled = true;
     }
     public override void Interact(PlayerInteraction.Handedness handedness) {
         if(isHeld) {

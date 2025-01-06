@@ -12,11 +12,14 @@ public class PlayerInteraction : MonoBehaviour {
         None,
     }
     public static PlayerInteraction Instance;
+    [Header("References")]
     [SerializeField] private InputReader input;
     [SerializeField] private Transform playerCameraRoot;
     [SerializeField] private Animator leftHandAnimator;
     [SerializeField] private Animator rightHandAnimator;
+    [Header("Settings")]
     [SerializeField] private float maxReach = 2f;
+    [SerializeField] private float reachRadius = .1f;
     private Selectable lastSelected;
     private Selectable usingSelectable;
     private Handedness usingHand = Handedness.None;
@@ -51,12 +54,11 @@ public class PlayerInteraction : MonoBehaviour {
             lastSelected = null;
             return;
         }
-        Ray ray = new Ray(playerCameraRoot.position, playerCameraRoot.forward);
 
         RaycastHit hit;
         int layermask = LayerMask.GetMask("Ignore Raycast");
 
-        if(Physics.Raycast(ray, out hit, maxReach, ~layermask, QueryTriggerInteraction.Ignore)) {
+        if(Physics.SphereCast(playerCameraRoot.position, reachRadius, playerCameraRoot.forward, out hit, maxReach, ~layermask, QueryTriggerInteraction.Ignore)) {
             if(hit.transform.TryGetComponent(out Selectable selectable)) {
                 if(selectable != lastSelected){
                     if(lastSelected != null){

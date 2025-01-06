@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private int startingCalories;
     [SerializeField] private int jumpCalorieCost = 5;
     [SerializeField] private float timeCalorieCost = 1f;
+    [SerializeField] private int level;
     public static GameManager Instance { get; private set;}
     public event EventHandler OnCaloriesChanged;
     private float playerCalories;
@@ -37,6 +38,10 @@ public class GameManager : MonoBehaviour {
         return playerCalories;
     }
 
+    public int GetPlayerCaloriesRounded() {
+        return Mathf.RoundToInt(playerCalories);
+    }
+
     public void RegisterJump() {
         SpendCalories(jumpCalorieCost);
     }
@@ -45,5 +50,9 @@ public class GameManager : MonoBehaviour {
         if(input.Direction == Vector3.zero) return;
         int sprintMult = input.IsSprinting ? PlayerTerrainController.Instance.GetCurrentSprintSpeedCalorieMultiplier() : 1;
         SpendCalories(PlayerTerrainController.Instance.GetCurrentMoveSpeedCalorieMultiplier() * Time.deltaTime * sprintMult);
+    }
+
+    public int GetLevel() {
+        return level;
     }
 }

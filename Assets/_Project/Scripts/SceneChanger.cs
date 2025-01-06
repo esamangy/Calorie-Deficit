@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class SceneChanger : MonoBehaviour {
     public static SceneChanger Instance { get; private set;}
-    private const string LEVEL_STRING_BASE = "Level";
+    private const string LEVEL_STRING_BASE = "Test Level ";
     private void Awake() {
         if(Instance != null) {
             Destroy(this);
