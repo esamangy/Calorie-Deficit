@@ -97,7 +97,6 @@ public class PlayerController : MonoBehaviour {
 
     private void OnDisable() {
         input.Jump -= OnJump;
-
         Cursor.lockState = CursorLockMode.Confined;
     }
 
@@ -113,6 +112,9 @@ public class PlayerController : MonoBehaviour {
 
     private void Update() {
         if(frozen) return;
+        if(transform.position.y < -50){
+            PlayerHUD.Instance.KillPlayer("Why");
+        }
         movement = new Vector3(input.Direction.x, 0f, input.Direction.y);
         cameraRoot.rotation = virtualVCam.rotation;
 
