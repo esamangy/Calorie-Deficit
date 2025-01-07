@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Leguar.TotalJSON;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
@@ -22,9 +23,13 @@ public class LevelGoal : MonoBehaviour {
     }
 
     private void FinishLevel() {
-        Dictionary<string, string> data = new Dictionary<string, string>();
-        data.Add(SaveSystem.HIGHEST_CALORIES_KEY, GameManager.Instance.GetPlayerCaloriesRounded().ToString());
-        SaveSystem.SaveData(GameManager.Instance.GetLevel().ToString(), data);
+        SaveSystem.LoadData(GameManager.Instance.GetLevel().ToString(), out JSON previous);
+        if(int.Parse(previous.GetString(SaveSystem.HIGHEST_CALORIES_KEY)) < GameManager.Instance.GetPlayerCaloriesRounded()){
+            //only save if this runs calories was more
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data.Add(SaveSystem.HIGHEST_CALORIES_KEY, GameManager.Instance.GetPlayerCaloriesRounded().ToString());
+            SaveSystem.SaveData(GameManager.Instance.GetLevel().ToString(), data);
+        }
         SceneChanger.Instance.ReturnToMenu();
     }
 
