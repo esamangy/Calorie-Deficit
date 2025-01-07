@@ -24,7 +24,12 @@ public class SceneChanger : MonoBehaviour {
         ChangeScene(LEVEL_STRING_BASE + level.ToString());
     }
 
+    public void RestartScene() {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
     public void ReturnToMenu() {
+        print("return to menu");
         SceneManager.LoadScene(0);
     }
 }

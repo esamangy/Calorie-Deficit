@@ -6390,9 +6390,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   input: {fileID: 11400000, guid: 5880a0669d171ef4986ebafdf67411d9, type: 2}
-  startingCalories: 1500
-  jumpCalorieCost: 5
-  timeCalorieCost: 1
+  calorieUsageStatsSO: {fileID: 11400000, guid: e67221ce53128354292dba5ab1ca93f0, type: 2}
+  level: 2
 --- !u!4 &2045096249
 Transform:
   m_ObjectHideFlags: 0

@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour {
     [SerializeField] float jumpCooldown = .2f;
     [SerializeField] float gravityMultiplier = 1f;
 
+    public static PlayerController Instance;
     private const float ZeroF = 0f;
     private Transform mainCam;
 
@@ -38,8 +39,13 @@ public class PlayerController : MonoBehaviour {
     CountdownTimer jumpTimer;
     CountdownTimer jumpCooldownTimer;
     private StateMachine stateMachine;
-    
+    private bool frozen = false;
     private void Awake() {
+        if(Instance != null) {
+            Destroy(this);
+            return;
+        }
+        Instance = this;
         mainCam = Camera.main.transform;
 
         virtualVCam.GetComponent<CinemachineCamera>().Follow = cameraRoot;
@@ -81,6 +87,14 @@ public class PlayerController : MonoBehaviour {
         Cursor.lockState = CursorLockMode.Locked;
     }
 
+    public void EnablePlayer() {
+        frozen = false;
+    }
+
+    public void DisablePlayer() {
+        frozen = true;
+    }
+
     private void OnDisable() {
         input.Jump -= OnJump;
 
@@ -88,14 +102,17 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void OnJump(bool performed) {
+        if(frozen) return;
         if(performed && !jumpTimer.IsRunning && !jumpCooldownTimer.IsRunning && groundChecker.IsGrounded) {
             jumpTimer.Start();
+            GameManager.Instance.RegisterJump();
         } else if (!performed && jumpTimer.IsRunning){
             jumpTimer.Stop();
         }
     }
 
     private void Update() {
+        if(frozen) return;
         movement = new Vector3(input.Direction.x, 0f, input.Direction.y);
         cameraRoot.rotation = virtualVCam.rotation;
 
@@ -115,6 +132,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     public void HandleJump() {
+        if(frozen) return;
         //if not jumping and grounded, keep jump velocity at 0
         if(!jumpTimer.IsRunning && groundChecker.IsGrounded) {
             jumpVelocity = ZeroF;
@@ -132,6 +150,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     public void HandleMovement() {
+        if(frozen) return;
         Vector3 adjustedDirection = Quaternion.AngleAxis(mainCam.eulerAngles.y, Vector3.up) * movement;
 
         if(adjustedDirection.magnitude > ZeroF) {

@@ -11,6 +11,10 @@ public class PlayerHUD : MonoBehaviour {
     [SerializeField] private Image progressUI;
     [SerializeField] private GameObject vignette;
     [SerializeField] private float changeSpeed = 1f;
+    [SerializeField] private GameObject deathScreen;
+    [SerializeField] private TextMeshProUGUI deathMessage;
+    [SerializeField] private Button retryButton;
+    [SerializeField] private Button menuButton;
     private float lastCaloriesUnrounded;
     private bool isPlayerHolding = false;
     private PlayerInteraction.Handedness holdingHandedness = PlayerInteraction.Handedness.None;
@@ -62,6 +66,22 @@ public class PlayerHUD : MonoBehaviour {
 
     public void ToggleVignette(bool onOff) {
         vignette.SetActive(onOff);
+    }
+
+    public void KillPlayer(string message) {
+        if(deathScreen.activeSelf) return;
+        deathScreen.SetActive(true);
+        deathMessage.text = message;
+        PlayerController.Instance.DisablePlayer();
+        Cursor.lockState = CursorLockMode.Confined;
+        retryButton.onClick.AddListener(() => {
+            retryButton.onClick.RemoveAllListeners();
+            SceneChanger.Instance.RestartScene();
+        });
+        menuButton.onClick.AddListener(() => {
+            retryButton.onClick.RemoveAllListeners();
+            SceneChanger.Instance.ReturnToMenu();
+        });
     }
 
 }

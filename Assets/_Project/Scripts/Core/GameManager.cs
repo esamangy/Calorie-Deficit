@@ -3,9 +3,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour {
     [SerializeField] private InputReader input;
-    [SerializeField] private int startingCalories;
-    [SerializeField] private int jumpCalorieCost = 5;
-    [SerializeField] private float timeCalorieCost = 1f;
+    [SerializeField] private CalorieUsageStatsSO calorieUsageStatsSO;
     [SerializeField] private int level;
     public static GameManager Instance { get; private set;}
     public event EventHandler OnCaloriesChanged;
@@ -17,10 +15,10 @@ public class GameManager : MonoBehaviour {
         Instance = this;
     }
     private void Start() {
-        AddCalories(startingCalories);
+        AddCalories(calorieUsageStatsSO.startingCalories);
     }
     private void Update() {
-        SpendCalories(timeCalorieCost * Time.deltaTime);
+        SpendCalories(calorieUsageStatsSO.timeCalorieCost * Time.deltaTime);
         HandleMovement();
     }
 
@@ -30,8 +28,13 @@ public class GameManager : MonoBehaviour {
     }
 
     public void SpendCalories(float value) {
+        if(playerCalories < 0) return; //player is already dead
         playerCalories -= value;
-        OnCaloriesChanged?.Invoke(this, EventArgs.Empty);
+        if(playerCalories < 0) {
+            PlayerHUD.Instance.KillPlayer("You Starved");
+        } else {
+            OnCaloriesChanged?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     public float GetPlayerCalories() {
@@ -43,7 +46,7 @@ public class GameManager : MonoBehaviour {
     }
 
     public void RegisterJump() {
-        SpendCalories(jumpCalorieCost);
+        SpendCalories(calorieUsageStatsSO.jumpCalorieCost);
     }
 
     private void HandleMovement(){

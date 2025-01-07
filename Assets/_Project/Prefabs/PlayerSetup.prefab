@@ -330,6 +330,34 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4475315980916962466, guid: 1c084ee3fd489ec40805d205caed64a3, type: 3}
+      propertyPath: DefaultBlend.Time
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4475315980916962466, guid: 1c084ee3fd489ec40805d205caed64a3, type: 3}
+      propertyPath: DefaultBlend.Style
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4475315980916962466, guid: 1c084ee3fd489ec40805d205caed64a3, type: 3}
+      propertyPath: DefaultBlend.CustomCurve.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4475315980916962466, guid: 1c084ee3fd489ec40805d205caed64a3, type: 3}
+      propertyPath: DefaultBlend.CustomCurve.m_Curve.Array.data[1].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4475315980916962466, guid: 1c084ee3fd489ec40805d205caed64a3, type: 3}
+      propertyPath: DefaultBlend.CustomCurve.m_Curve.Array.data[1].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4475315980916962466, guid: 1c084ee3fd489ec40805d205caed64a3, type: 3}
+      propertyPath: DefaultBlend.CustomCurve.m_Curve.Array.data[0].inSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4475315980916962466, guid: 1c084ee3fd489ec40805d205caed64a3, type: 3}
+      propertyPath: DefaultBlend.CustomCurve.m_Curve.Array.data[0].outSlope
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4533500371721733027, guid: 1c084ee3fd489ec40805d205caed64a3, type: 3}
       propertyPath: m_Name
       value: Camera System
