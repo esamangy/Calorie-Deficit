@@ -56,6 +56,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: LBush1
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 0c3a8c982c95db84fa48e76a54e8e8e5, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -120,6 +124,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Berries (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 2704234376749692242, guid: 990b2fbaef7894949bc129055c2f1acc, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 3372226876119511016, guid: 990b2fbaef7894949bc129055c2f1acc, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.8821
@@ -181,6 +189,10 @@ PrefabInstance:
     - target: {fileID: 2704234376749692242, guid: 990b2fbaef7894949bc129055c2f1acc, type: 3}
       propertyPath: m_Name
       value: Berries (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2704234376749692242, guid: 990b2fbaef7894949bc129055c2f1acc, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 3372226876119511016, guid: 990b2fbaef7894949bc129055c2f1acc, type: 3}
       propertyPath: m_LocalScale.x
@@ -256,6 +268,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Berries (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 2704234376749692242, guid: 990b2fbaef7894949bc129055c2f1acc, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 3372226876119511016, guid: 990b2fbaef7894949bc129055c2f1acc, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.77019
@@ -329,6 +345,10 @@ PrefabInstance:
     - target: {fileID: 2704234376749692242, guid: 990b2fbaef7894949bc129055c2f1acc, type: 3}
       propertyPath: m_Name
       value: Berries
+      objectReference: {fileID: 0}
+    - target: {fileID: 2704234376749692242, guid: 990b2fbaef7894949bc129055c2f1acc, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 3372226876119511016, guid: 990b2fbaef7894949bc129055c2f1acc, type: 3}
       propertyPath: m_LocalScale.x
