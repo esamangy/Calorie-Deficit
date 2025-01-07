@@ -54,6 +54,7 @@ public class PlayerSinking : MonoBehaviour {
             sinkProgress = Mathf.InverseLerp(0, 1, timeSinking / sinkTime);
             yield return null;
         }
+        PlayerHUD.Instance.KillPlayer("You sunk to your death");
         OnPlayerSunk?.Invoke(this, EventArgs.Empty);
     }
 
