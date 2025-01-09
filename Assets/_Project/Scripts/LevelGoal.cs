@@ -24,11 +24,13 @@ public class LevelGoal : MonoBehaviour {
 
     private void FinishLevel() {
         SaveSystem.LoadData(GameManager.Instance.GetLevel().ToString(), out JSON previous);
-        if(int.Parse(previous.GetString(SaveSystem.HIGHEST_CALORIES_KEY)) < GameManager.Instance.GetPlayerCaloriesRounded()){
-            //only save if this runs calories was more
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(SaveSystem.HIGHEST_CALORIES_KEY, GameManager.Instance.GetPlayerCaloriesRounded().ToString());
-            SaveSystem.SaveData(GameManager.Instance.GetLevel().ToString(), data);
+        try{
+            string previousHighScore = previous.GetString(SaveSystem.HIGHEST_CALORIES_KEY);
+            if(int.Parse(previous.GetString(SaveSystem.HIGHEST_CALORIES_KEY)) < GameManager.Instance.GetPlayerCaloriesRounded()) {
+                SaveData();
+            }
+        } catch {
+            SaveData();
         }
         SceneChanger.Instance.ReturnToMenu();
     }
@@ -37,6 +39,12 @@ public class LevelGoal : MonoBehaviour {
         if(other.CompareTag("Player")){
             countdown.Start();
         }
+    }
+
+    private void SaveData() {
+        Dictionary<string, string> data = new Dictionary<string, string>();
+        data.Add(SaveSystem.HIGHEST_CALORIES_KEY, GameManager.Instance.GetPlayerCaloriesRounded().ToString());
+        SaveSystem.SaveData(GameManager.Instance.GetLevel().ToString(), data);
     }
 
     private void OnTriggerExit(Collider other) {

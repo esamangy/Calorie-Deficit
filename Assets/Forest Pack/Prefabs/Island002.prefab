@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7983067227164887800}
   - component: {fileID: 5273004953213419058}
   - component: {fileID: 4387425798145455934}
+  - component: {fileID: 8479164607518751083}
   m_Layer: 6
   m_Name: Island002
   m_TagString: Untagged
@@ -110,3 +111,16 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -7387706064836869012, guid: 05b18ec8198b28e49b1d1686110c040c, type: 3}
+--- !u!114 &8479164607518751083
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5921536836391837671}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c935b48b0948f0940876bf32327b3256, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  terrainType: 0

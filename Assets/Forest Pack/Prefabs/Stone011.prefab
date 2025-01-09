@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3752326706785544118}
   - component: {fileID: 1438343778480493436}
   - component: {fileID: 2798269186580161987}
+  - component: {fileID: 7901445690952108425}
   m_Layer: 6
   m_Name: Stone011
   m_TagString: Untagged
@@ -66,7 +67,7 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: f4d8b37aec93ed645ab64bce2f8cb02c, type: 2}
-  - {fileID: 5523053481396897384, guid: de03dc500bc58504aab9f48f8a1ea09c, type: 3}
+  - {fileID: 2100000, guid: 53069717d3097674790cc79228b9afe3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -110,3 +111,16 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -2808221752302300002, guid: de03dc500bc58504aab9f48f8a1ea09c, type: 3}
+--- !u!114 &7901445690952108425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 645979005104075433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c935b48b0948f0940876bf32327b3256, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  terrainType: 0
