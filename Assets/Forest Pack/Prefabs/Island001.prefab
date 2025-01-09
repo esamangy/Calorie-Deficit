@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2919362635944750001}
   - component: {fileID: -2714458269480576230}
   - component: {fileID: 7699925177918739645}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Island001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -113,7 +113,7 @@ GameObject:
   - component: {fileID: 6385330111272527822}
   - component: {fileID: 2706959045845155693}
   - component: {fileID: 6029374482199407130}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Plane.005
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -200,7 +200,7 @@ GameObject:
   - component: {fileID: 1509652330237703176}
   - component: {fileID: 3570445366263017914}
   - component: {fileID: 289209636041008205}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Plane.004
   m_TagString: Untagged
   m_Icon: {fileID: 0}
