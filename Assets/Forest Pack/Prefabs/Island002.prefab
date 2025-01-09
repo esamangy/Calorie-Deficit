@@ -11,8 +11,7 @@ GameObject:
   - component: {fileID: 6441931757938197853}
   - component: {fileID: 7983067227164887800}
   - component: {fileID: 5273004953213419058}
-  - component: {fileID: 4700564999744988868}
-  - component: {fileID: 7051457490162177588}
+  - component: {fileID: 4387425798145455934}
   m_Layer: 6
   m_Name: Island002
   m_TagString: Untagged
@@ -89,8 +88,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &4700564999744988868
-BoxCollider:
+--- !u!64 &4387425798145455934
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -107,27 +106,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 8.370538, y: 4.257669, z: 12.206022}
-  m_Center: {x: 0.3531041, y: -0.8247621, z: -0.3245213}
---- !u!65 &7051457490162177588
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5921536836391837671}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 12.311747, y: 4.2832613, z: 10.72167}
-  m_Center: {x: 0.071588516, y: -0.811966, z: -0.35011292}
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -7387706064836869012, guid: 05b18ec8198b28e49b1d1686110c040c, type: 3}
