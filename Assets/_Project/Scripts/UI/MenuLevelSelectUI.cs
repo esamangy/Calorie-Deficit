@@ -10,6 +10,13 @@ public class MenuLevelSelectUI : MonoBehaviour {
         button = GetComponent<Button>();
     }
     private void Start() {
-        button.onClick.AddListener(() => SceneChanger.Instance.LoadLevel(desiredLevel));
+        button.onClick.AddListener(() => {
+            if(desiredLevel == -1) return;
+            SceneChanger.Instance.LoadLevel(desiredLevel);
+        });
+    }
+
+    public void Quit() {
+        Application.Quit();
     }
 }
